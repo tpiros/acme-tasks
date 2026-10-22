@@ -40,9 +40,7 @@ export function createApp(): express.Express {
       if (!VALID_STATUSES.includes(status as TaskStatus)) {
         return res.status(400).json({ error: `status must be one of ${VALID_STATUSES.join(', ')}` });
       }
-      tasks = status === 'done'
-        ? tasks.filter((t) => t.status !== 'open')
-        : tasks.filter((t) => t.status === status);
+      tasks = tasks.filter((t) => t.status === status);
     }
 
     res.json(paginate(tasks, page, limit));

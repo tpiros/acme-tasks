@@ -51,3 +51,21 @@ describe('task lifecycle', () => {
     expect(res.status).toBe(400);
   });
 });
+
+describe('task filtering', () => {
+  it('filters by status=done and excludes archived tasks', async () => {
+    const openTask = await request(app).post('/tasks').send({ title: 'Open task' });
+    const doneTask = await request(app).post('/tasks').send({ title: 'Done task' });
+    const archivedTask = await request(app).post('/tasks').send({ title: 'Archived task' });
+
+    await request(app).patch(`/tasks/${doneTask.body.id}/status`).send({ status: 'done' });
+    await request(app).patch(`/tasks/${archivedTask.body.id}/status`).send({ status: 'archived' });
+
+    const res = await request(app).get('/tasks?status=done');
+    expect(res.status).toBe(200);
+    expect(res.body.total).toBe(1);
+    for (const item of res.body.items) {
+      expect(item.status).toBe('done');
+    }
+  });
+});
