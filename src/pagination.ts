@@ -7,7 +7,7 @@ export interface Page<T> {
 
 // Pages are 1-based: page 1 returns the first `limit` items.
 export function paginate<T>(all: T[], page: number, limit: number): Page<T> {
-  const start = page * limit;
+  const start = (page - 1) * limit;
   return {
     items: all.slice(start, start + limit),
     page,
