@@ -11,7 +11,7 @@ export function validateTitle(title: unknown): ValidationResult {
     return { ok: false, error: 'title must be a string' };
   }
   const trimmed = title.trim();
-  if (trimmed.length < 3) {
+  if (trimmed.length === 0) {
     return { ok: false, error: 'title must not be empty' };
   }
   if (trimmed.length > MAX_TITLE_LENGTH) {
